@@ -46,5 +46,6 @@ extension Battery {
 }
 
 func batteryIsOk(temperature: Float, soc: Float, chargeRate: Float) {
-    return (isTemperatureOutOfRange() || isSocOutOfRange() || isChargeRateOutOfRange()) ? false : true
+    let battery = Battery(temperature: temperature, soc: soc, chargeRate: chargeRate)
+    return (battery.isTemperatureOutOfRange() || battery.isSocOutOfRange() || battery.isChargeRateOutOfRange()) ? false : true
 }
