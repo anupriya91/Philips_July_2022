@@ -1,19 +1,28 @@
 import Foundation
-public class A: NSCopying{
 
-    public func M(){
-        print("A.M")
-    }
-    public func copy(with zone: NSZone? = nil) -> Any {
-        return self.copyWithZone(zone: zone!)
-    }
+//Object Structure
+public class ComplexObject{
 
-    func copyWithZone(zone: NSZone) -> AnyObject {
-      // This is the reason why `init(_ model: GameModel)`
-      // must be required, because `GameModel` is not `final`.
-        return type(of: self)
+    let structure = [A]()
+    public func Operation(visitor: C){
+        for item in structure {
+            item.Accept(visitor: visitor);
+        }
     }
+    
+    public func AddStructureItem(item: A){
+        structure.append(item);
+    }
+}
+public class A{
 
+    public  func M(){
+        print("A.M");
+    }
+    public func Accept(visitor: C ){
+        
+        visitor.O(obj: self);
+    }
 
 }
 
@@ -23,44 +32,40 @@ public class B:A{
     {
         print("B.M");
     }
-
-
-}
-
-public class C: NSCopying{
-
-    public func N(obj: A){
-        print("C.A.N");
-    obj.M();
-}
-    public func N(obj: B){
-        print("C.B.N");
-    obj.M();
-}
-    public func copy(with zone: NSZone? = nil) -> Any {
-        return self.copyWithZone(zone: zone!)
+    public override func Accept (visitor: C){
+        
+        visitor.O(obj: self);
     }
 
-    func copyWithZone(zone: NSZone) -> AnyObject {
-      // This is the reason why `init(_ model: GameModel)`
-      // must be required, because `GameModel` is not `final`.
-        return type(of: self)
-    }
+}
 
+//Visitor Class
+public class C{
+
+    //operation
+    public  func O(obj:A){
+    print("C.A.N");
+    obj.M();
+}
+    //operation
+    public func O(obj: B) {
+    print("C.B.N");
+    obj.M();
+}
 
 }
-public class Program {
-    
+public class Program
+{
     public static func Main()
     {
-        let Aobj = B().copy(with: nil);
-        let cObj = C().copy(with: nil);
-        cObj.N(obj: Aobj)
+        let obj = A();
+        let obj_b = B();
+        
+        let tree = ComplexObject();
+        tree.AddStructureItem(item: obj);
+        tree.AddStructureItem(item: obj_b);
+        
+        let cObj = C();
+        tree.Operation(cObj);
     }
-
 }
-    
-let pgm = Program.Main()
-print(pgm)
-    
- 
