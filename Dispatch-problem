@@ -1,0 +1,66 @@
+import Foundation
+public class A: NSCopying{
+
+    public func M(){
+        print("A.M")
+    }
+    public func copy(with zone: NSZone? = nil) -> Any {
+        return self.copyWithZone(zone: zone!)
+    }
+
+    func copyWithZone(zone: NSZone) -> AnyObject {
+      // This is the reason why `init(_ model: GameModel)`
+      // must be required, because `GameModel` is not `final`.
+        return type(of: self)
+    }
+
+
+}
+
+public class B:A{
+
+    public override func M()
+    {
+        print("B.M");
+    }
+
+
+}
+
+public class C: NSCopying{
+
+    public func N(obj: A){
+        print("C.A.N");
+    obj.M();
+}
+    public func N(obj: B){
+        print("C.B.N");
+    obj.M();
+}
+    public func copy(with zone: NSZone? = nil) -> Any {
+        return self.copyWithZone(zone: zone!)
+    }
+
+    func copyWithZone(zone: NSZone) -> AnyObject {
+      // This is the reason why `init(_ model: GameModel)`
+      // must be required, because `GameModel` is not `final`.
+        return type(of: self)
+    }
+
+
+}
+public class Program {
+    
+    public static func Main()
+    {
+        let Aobj = B().copy(with: nil);
+        let cObj = C().copy(with: nil);
+        cObj.N(obj: Aobj)
+    }
+
+}
+    
+let pgm = Program.Main()
+print(pgm)
+    
+ 
